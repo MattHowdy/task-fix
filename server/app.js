@@ -4,14 +4,11 @@ const app = express();
 const cors = require('cors')
 const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
-
+const routes = require('./routes/routes')
 
 dotenv.config()
-const PORT = process.env.PORT || 3001
+const PORT = process.env.BACKEND_PORT || 3001
 
-app.get('/', (req, res) => { 
-    res.send({'status': 'ok'})
-});
 
 app.use(bodyParser.json({}))
 app.use(
@@ -39,36 +36,10 @@ const corsOptions = {
     credentials: true,
   }
   
-  app.use(cors(corsOptions))
+app.use(cors(corsOptions))
 
-
-app.get('/tasks', (req, res) => { 
-    const tasks = [ 
-        { 
-            id : 1,
-            status: 1,
-            value : 'new task from backend',
-            isEditing : false
-        },{
-            id : 2,
-            status: 2,
-            value :  'again from backend',
-            isEditing : false
-        }
-    ]
-
-    res.send({'tasks': tasks})
-});
-
-
-app.post('/tasks/add-task', async(req,res)=>{
-    const newTask = req.body.tasks
-
-    console.log('newTask', newTask);
-
-    res.sendStatus(200)
-})
-
+  
+app.use('/', routes)
 
 
 app.listen(PORT, () => {

@@ -24,7 +24,7 @@ class TaskPage extends Component {
         const validatedValue = validation.input(e.target.value)
         
         if(e.key === constants.ENTER && validatedValue){
-            const newTask = await post('http://localhost:3001/tasks/add-task', {task : validatedValue})
+            const newTask = await post('/tasks/add-task', {task : validatedValue})
             e.target.value = null
 
             console.log(newTask)

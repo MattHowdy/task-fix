@@ -5,10 +5,14 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
 const routes = require('./routes/routes')
+// const mongoose = require('mongoose')
+
 
 dotenv.config()
-const PORT = process.env.BACKEND_PORT || 3001
+const PORT = process.env.BACKEND_PORT || 4001
 
+// mongoose.set('useFindAndModify', false)
+// mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
 
 app.use(bodyParser.json({}))
 app.use(
@@ -17,7 +21,7 @@ app.use(
   })
 )
 const whitelist = [
-    'http://localhost:3001'
+    'http://localhost:4001'
 ]
 
 const corsOptions = {

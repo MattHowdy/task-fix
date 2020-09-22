@@ -1,5 +1,5 @@
 import React from "react";
-import statuses from '../helpers/Statuses'
+import statuses from '../model/Statuses'
 
 
 const TaskTable = (props) => {

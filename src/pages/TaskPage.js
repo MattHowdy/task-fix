@@ -1,41 +1,43 @@
 import React, { Component } from 'react';
-import statuses from '../helpers/Statuses'
+import statuses from '../model/Statuses'
 import constants from '../helpers/constants'
 import TaskTable from '../components/TaskTable';
 import TaskInput from '../components/TaskInput';
 import validation from '../helpers/validation'
-import axios from 'axios'
-
+import { get, post } from '../helpers/requests'
 
 class TaskPage extends Component {
     state={
         tasks:[],
-        currentTask : ''
+        currentTask : '',
+        newTask : ''
     }
     
     componentDidMount = async()=>{
-        const res = await axios.get('http://localhost:3001/tasks')
-        this.setState({ tasks: res.data.tasks})
+        const res = await get('/tasks')
+        this.setState({ tasks: res.tasks})
     }
 
 
-    addTask = (e)=>{
-        let validatedValue = validation.input(e.target.value)
-
+    addTask = async (e)=>{
+        e.persist()
+        const validatedValue = validation.input(e.target.value)
+        
         if(e.key === constants.ENTER && validatedValue){
-
-            let newTasks = [...this.state.tasks, {
-                
-                id : this.state.tasks.length + 1,
-                status: statuses.ACTIVE, 
-                value : validatedValue,
-                isEditing: false
-            }]
-            this.setState({tasks : newTasks, newTask : null})
+            const newTask = await post('http://localhost:3001/tasks/add-task', {task : validatedValue})
             e.target.value = null
-        }
 
-        axios.post('http://localhost:3001/tasks/add-task', {tasks : this.state.tasks})
+            console.log(newTask)
+
+            // let newTasks = [...this.state.tasks, {
+            //     id : this.state.tasks.length + 1,
+            //     status: statuses.ACTIVE, 
+            //     value : validatedValue,
+            //     isEditing: false
+            // }]
+            // this.setState({tasks : newTasks, newTask : null})
+            
+        }
     }
 
 

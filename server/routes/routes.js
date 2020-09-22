@@ -26,10 +26,11 @@ router.get('/tasks', (req, res) => {
 
 
 router.post('/tasks/add-task', async(req,res)=>{
-    const newTask = req.body.tasks
+    const newTask = req.body.task
 
     console.log('newTask', newTask);
 
+    // res.send({ task : newTask})
     res.sendStatus(200)
 })
 

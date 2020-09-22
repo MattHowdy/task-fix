@@ -4,25 +4,21 @@ import constants from '../helpers/constants'
 import TaskTable from '../components/TaskTable';
 import TaskInput from '../components/TaskInput';
 import validation from '../helpers/validation'
+import axios from 'axios'
+
 
 class TaskPage extends Component {
     state={
-        tasks:[ 
-            { 
-                id : 1,
-                status: statuses.ACTIVE,
-                value : 'new task',
-                isEditing : false
-            },{
-                id : 2,
-                status: statuses.COMPLETED,
-                value :  'again a task',
-                isEditing : false
-            }
-        ],
+        tasks:[],
         currentTask : ''
     }
     
+    componentDidMount = async()=>{
+        const res = await axios.get('http://localhost:3001/tasks')
+        this.setState({ tasks: res.data.tasks})
+    }
+
+
     addTask = (e)=>{
         let validatedValue = validation.input(e.target.value)
 
@@ -38,6 +34,8 @@ class TaskPage extends Component {
             this.setState({tasks : newTasks, newTask : null})
             e.target.value = null
         }
+
+        axios.post('http://localhost:3001/tasks/add-task', {tasks : this.state.tasks})
     }
 
 

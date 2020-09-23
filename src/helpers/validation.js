@@ -1,11 +1,5 @@
-const Validation ={
 
-
-    input(string){
+    export const inputValidation = function inputValidation (string){
         return string.trim()
     }
 
-}
-
-
-export default Validation

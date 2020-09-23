@@ -3,7 +3,7 @@ import statuses from '../model/Statuses'
 import constants from '../helpers/constants'
 import TaskTable from '../components/TaskTable';
 import TaskInput from '../components/TaskInput';
-import validation from '../helpers/validation'
+import { inputValidation } from '../helpers/validation'
 import { get, post, deleteReq, patch } from '../helpers/requests'
 
 class TaskPage extends Component {
@@ -21,17 +21,19 @@ class TaskPage extends Component {
 
     refreshTasks = tasks => this.setState({ tasks })
 
+    refreshTaskList = () => this.setState({tasks: !this.state.tasks})
+
 
     addTask = async (e)=>{
         e.persist()
-        const validatedValue = validation.input(e.target.value)
+        const validatedValue = inputValidation(e.target.value)
         
         if(e.key === constants.ENTER && validatedValue){
 
             // this.setState({ loading : true})
             await post('/tasks/create', {task : validatedValue})
             e.target.value = null           
-            // this.setState({ loading : false}) 
+            this.setState({ loading : false}) 
         }
     }
 
@@ -51,7 +53,11 @@ class TaskPage extends Component {
     }
     
     removeTask = async(taskID)=>{
+        // TODO
         await deleteReq(`/tasks/delete/${taskID}`)
+            // .then( res => this.refreshTaskList())
+
+
 
         // const allTasks = [...this.state.tasks].map( stateTask => {
         //     if(stateTask._id === taskID){
@@ -80,7 +86,7 @@ class TaskPage extends Component {
 
 
     editTask = async(e, taskID)=>{
-        const validatedInput = validation.input(e.target.value)
+        const validatedInput = inputValidation(e.target.value)
 
         if(e.key === constants.ENTER){
 
@@ -112,7 +118,7 @@ class TaskPage extends Component {
     }
 
     closeEditView = async(taskID)=>{
-        const validatedInput = validation.input(this.state.currentTask)
+        const validatedInput = inputValidation(this.state.currentTask)
     
         if(validatedInput){
             await patch(`tasks/update/${taskID}`, { value: validatedInput})

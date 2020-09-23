@@ -17,16 +17,16 @@ const PORT = process.env.BACKEND_PORT || 4001
 
 // client refers to react app
 //Static file declaration
-app.use(express.static(path.join(__dirname, 'src/build')));
+// app.use(express.static(path.join(__dirname, 'src/build')));
 
 //production mode
-if(process.env.NODE_ENV === 'production') {  
-    app.use(express.static(path.join(__dirname, '/build')));  
+// if(process.env.NODE_ENV === 'production') {  
+//     app.use(express.static(path.join(__dirname, '/build')));  
     
-    app.get('*', (req, res) => {    
-        // eslint-disable-next-line no-native-reassign
-        res.sendfile(path.join('/build/index.html'));  })
-}
+//     app.get('*', (req, res) => {    
+//         // eslint-disable-next-line no-native-reassign
+//         res.sendfile(path.join('/build/index.html'));  })
+// }
 
 //build mode
 //  app.get('*', (req, res) => 

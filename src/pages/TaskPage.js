@@ -4,19 +4,22 @@ import constants from '../helpers/constants'
 import TaskTable from '../components/TaskTable';
 import TaskInput from '../components/TaskInput';
 import validation from '../helpers/validation'
-import { get, post } from '../helpers/requests'
+import { get, post, deleteReq, patch } from '../helpers/requests'
 
 class TaskPage extends Component {
     state={
         tasks:[],
         currentTask : '',
-        newTask : ''
+        newTask : '',
+        loading : false
     }
     
     componentDidMount = async()=>{
-        const res = await get('/tasks')
-        this.setState({ tasks: res.tasks})
+        await get('/tasks')
+            .then(this.refreshTasks)
     }
+
+    refreshTasks = tasks => this.setState({ tasks })
 
 
     addTask = async (e)=>{
@@ -24,26 +27,18 @@ class TaskPage extends Component {
         const validatedValue = validation.input(e.target.value)
         
         if(e.key === constants.ENTER && validatedValue){
-            const newTask = await post('/tasks/add-task', {task : validatedValue})
-            e.target.value = null
 
-            console.log(newTask)
-
-            // let newTasks = [...this.state.tasks, {
-            //     id : this.state.tasks.length + 1,
-            //     status: statuses.ACTIVE, 
-            //     value : validatedValue,
-            //     isEditing: false
-            // }]
-            // this.setState({tasks : newTasks, newTask : null})
-            
+            // this.setState({ loading : true})
+            await post('/tasks/create', {task : validatedValue})
+            e.target.value = null           
+            // this.setState({ loading : false}) 
         }
     }
 
 
     completeTask = (taskID)=>{
-        const allTasks = [...this.state.tasks].map( stateTask => {
-            if(stateTask.id === taskID){
+        const tasks = [...this.state.tasks].map( stateTask => {
+            if(stateTask._id === taskID){
                 if(stateTask.status === statuses.COMPLETED){
                     stateTask.status = statuses.ACTIVE
                 }else if( stateTask.status === statuses.ACTIVE){
@@ -52,56 +47,63 @@ class TaskPage extends Component {
             }
             return stateTask
         }) 
-        this.setState({ tasks : allTasks })
+        this.setState({ tasks })
     }
     
-    removeTask =(taskID)=>{
-        const allTasks = [...this.state.tasks].map( stateTask => {
-            if(stateTask.id === taskID){
-                stateTask.status = statuses.DELETED
-                stateTask.isEditing = false
-            }
-            return stateTask
-        })
-        this.setState({ tasks : allTasks })
+    removeTask = async(taskID)=>{
+        await deleteReq(`/tasks/delete/${taskID}`)
+
+        // const allTasks = [...this.state.tasks].map( stateTask => {
+        //     if(stateTask._id === taskID){
+        //         stateTask.status = statuses.DELETED
+        //         stateTask.isEditing = false
+        //     }
+        //     return stateTask
+        // })
+        // this.setState({ tasks : allTasks })
     }
 
 
     startEditingTask =(taskID)=>{
-
         const isAnyTaskInEditing = [...this.state.tasks].filter(stateTask => stateTask.isEditing === true).length === 0
 
         if(isAnyTaskInEditing){
-            const allTasks = [...this.state.tasks].map( stateTask => {
-                if(stateTask.id === taskID && stateTask.status === statuses.ACTIVE){
+            const tasks = [...this.state.tasks].map( stateTask => {
+                if(stateTask._id === taskID && stateTask.status === statuses.ACTIVE){
                     stateTask.isEditing = true
                 }
                 return stateTask
             })
-            this.setState({ tasks : allTasks })
+            this.setState({ tasks })
         }
     }
 
 
-    editTask =(e, taskID)=>{
+    editTask = async(e, taskID)=>{
         const validatedInput = validation.input(e.target.value)
 
         if(e.key === constants.ENTER){
 
-            const newTasks = [...this.state.tasks].map(stateTask =>{
-                if(stateTask.id === taskID && stateTask.status === statuses.ACTIVE){
+            if(validatedInput){
+                await patch(`tasks/update/${taskID}`, { value: validatedInput})
+            }else{
+                await deleteReq(`/tasks/delete/${taskID}`)  
+            }
 
-                    if(validatedInput){
-                        stateTask.isEditing = false
-                        stateTask.value = validatedInput
-                    }else{
-                        stateTask.status = statuses.DELETED
-                    }
-                }
-                return stateTask
-            })
+            // const tasks = [...this.state.tasks].map(stateTask =>{
+            //     if(stateTask._id === taskID && stateTask.status === statuses.ACTIVE){
+
+            //         if(validatedInput){
+            //             stateTask.isEditing = false
+            //             stateTask.value = validatedInput
+            //         }else{
+            //             stateTask.status = statuses.DELETED
+            //         }
+            //     }
+            //     return stateTask
+            // })
         
-            this.setState({tasks : newTasks})
+            // this.setState({tasks })
         }
     }
 
@@ -109,23 +111,30 @@ class TaskPage extends Component {
         this.setState({ currentTask : e.target.value})
     }
 
-    closeEditView = (taskID)=>{
+    closeEditView = async(taskID)=>{
         const validatedInput = validation.input(this.state.currentTask)
-
-        const allTasks = [...this.state.tasks].map(stateTask =>{
-            if(stateTask.id === taskID && stateTask.status === statuses.ACTIVE ){
-                stateTask.isEditing = false
-
-                if(validatedInput){
-                    stateTask.value = validatedInput
-                }else{
-                    stateTask.status = statuses.DELETED
-                }
-            }
-            return stateTask
-        })
     
-        this.setState({tasks : allTasks, currentTask : ''})
+        if(validatedInput){
+            await patch(`tasks/update/${taskID}`, { value: validatedInput})
+        }else{
+            await deleteReq(`/tasks/delete/${taskID}`)  
+        }
+
+        // const allTasks = [...this.state.tasks].map( (stateTask) =>{
+        //     if(stateTask._id === taskID && stateTask.status === statuses.ACTIVE ){
+        //         stateTask.isEditing = false
+
+        //         if(validatedInput){
+        //             stateTask.value = validatedInput
+        //         }else{
+                    
+        //             stateTask.status = statuses.DELETED
+        //         }
+        //     }
+        //     return stateTask
+        // })
+
+        // this.setState({tasks : allTasks, currentTask : ''})
     }
 
 

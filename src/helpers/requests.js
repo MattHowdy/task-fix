@@ -11,7 +11,7 @@ function getAxtiosInstance() {
 
 export const get = function get(uri, params) {
     return new Promise((resolve, reject) => {
-        
+      
       getAxtiosInstance().get(uri, {
         params: params
       }).then(result => {
@@ -25,14 +25,13 @@ export const get = function get(uri, params) {
 
 
 export const post = function post(uri, body){
+  return new Promise((resolve, reject) => {
+      getAxtiosInstance().post(uri, body).then(result => {
+      resolve(result.data)
+      }).catch(error => {
+      console.error(error)
+      reject(error)
+      })
 
-return new Promise((resolve, reject) => {
-    getAxtiosInstance().post(uri, body).then(result => {
-    resolve(result.data)
-    }).catch(error => {
-    console.error(error)
-    reject(error)
-    })
-
-})
+  })
 }

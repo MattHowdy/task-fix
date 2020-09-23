@@ -42,8 +42,8 @@ const TaskTable = (props) => {
         return  (
             <div>
                 <h2> My tasks </h2>
-
-                    { props.tasks.map((task, index) => {
+                    { props.tasks ? 
+                     props.tasks.map((task, index) => {
                         if(task.status !== statuses.DELETED){
                             return (
                                 <div key={ 'taskid-' + index} className="sideBySide">
@@ -58,7 +58,8 @@ const TaskTable = (props) => {
                                 </div>
                             )
                         }
-                    })}
+                    }) 
+                    : null}
             </div>)
     
 };

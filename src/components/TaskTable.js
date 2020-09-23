@@ -9,17 +9,17 @@ const TaskTable = (props) => {
                 <input
                     autoFocus
                     defaultValue={task.value}
-                    onKeyPress={(e)=>props.onEditTask(e, task.id)}
+                    onKeyPress={(e)=>props.onEditTask(e, task._id)}
                     onChange={(e)=>props.onTaskEditChange(e)}
                 />
-                <div onClick={()=>props.onCloseEditView(task.id)}>OK</div>
+                <div onClick={()=>props.onCloseEditView(task._id)}>OK</div>
             </div>
     }
 
     const renderDefaultView =(task)=>{
         return <div 
                 className={ task.status === statuses.COMPLETED ? 'completedTask' : null}
-                onDoubleClick={()=>props.onStartEditingTask(task.id)}
+                onDoubleClick={()=>props.onStartEditingTask(task._id)}
                 >
                 {task.value}
             </div>
@@ -28,14 +28,14 @@ const TaskTable = (props) => {
     const renderCheckbox =(task)=>{
         return <input 
                 type="checkbox" 
-                value={task.id} 
-                onClick={()=>props.onCompleteTask(task.id)} 
+                value={task._id} 
+                onClick={()=>props.onCompleteTask(task._id)} 
                 defaultChecked={task.status === statuses.COMPLETED ? 'checked' : ''}
             />
     }
 
-    const renderCloseButton =(task)=>{
-        return <button  onClick={ ()=>props.onRemoveTask(task.id) }>
+    const renderRemoveButton =(task)=>{
+        return <button  onClick={ ()=>props.onRemoveTask(task._id) }>
                     x
                 </button>
     }
@@ -54,7 +54,7 @@ const TaskTable = (props) => {
                                         : renderDefaultView(task)                                    
                                     }
 
-                                  {renderCloseButton(task)}
+                                  {renderRemoveButton(task)}
                                 </div>
                             )
                         }

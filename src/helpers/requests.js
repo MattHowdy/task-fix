@@ -3,7 +3,7 @@ import axios from 'axios'
 
 function getAxtiosInstance() {
     return axios.create({
-      baseURL: process.env.REACT_APP_BACKEND_BASE_URL,
+      baseURL: '/' ,//process.env.REACT_APP_BACKEND_BASE_URL,
       timeout: 60000
     });
 }

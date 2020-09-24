@@ -1,8 +1,33 @@
-.App {
-  text-align: center;
+body {
+  font-family: 'Source Sans Pro', sans-serif !important;
+  line-height: 22px;
+  letter-spacing: 0.1px;
+  color: #3c3c3c !important;
+  font-size: 16px;
+}
+.appContainer{
+  height: 100vh;
+  width: 100vw;
+  background-color: rgb(240, 239, 237);
 }
 
+/* NAVBAR  START */
+.Navbar{
+  padding: 30px;
+}
 
+.Navbar img {
+  -webkit-transition: -webkit-transform 1.2s ease-in-out;
+          transition:         transform 1.2s ease-in-out;
+}
+.Navbar img:hover {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+/* NAVBAR END */
+
+
+/* TASKPAGE START */
 .completedTask {
   text-decoration : line-through;
   color: lightgrey
@@ -11,3 +36,45 @@
 .sideBySide{
   display: flex;
 }
+
+.TaskPageContainer{
+  background-color: white;
+  width: 100vw;
+  height : 66vh;
+  margin: auto;
+  max-width: 50%;
+  min-width: 320px;
+  padding: 10px;
+  border: 1px solid grey;
+  text-align: center;
+}
+
+@media (max-width: 500px) {
+
+}
+
+.TaskTable h2{
+  border-top:1px solid lightgrey ;
+  padding-top: 20px;
+  margin-top: 40px;
+  font-weight: 400;
+}
+
+
+.TaskTable .Tasks{
+  margin: 0 auto;
+  width: 50%;
+}
+
+.TaskTable .Tasks .Task{
+  margin: 7px
+}
+
+.TaskTable .Tasks .Button{
+  background-color: red
+}
+
+.closeButton{
+  color: red
+}
+/* TASKPAGE END */

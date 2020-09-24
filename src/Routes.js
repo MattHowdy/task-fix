@@ -6,16 +6,19 @@ import {
   Switch
 } from 'react-router-dom'
 import './App.css'
+import MainFrame from './components/Layout/MainFrame'
 import TaskPage from './pages/TaskPage'
 
 class Routes extends React.Component {
   render() {
     return (
       <Router>
-        <Switch>
-            <Route exact path='/' component={TaskPage} />
-            <Redirect to='/' />
-        </Switch>
+        <MainFrame>
+          <Switch>
+              <Route exact path='/' component={TaskPage} />
+              <Redirect to='/' />
+          </Switch>
+        </MainFrame>
       </Router>
     )
   }

@@ -1,5 +1,7 @@
 import React from "react";
 import statuses from '../model/Statuses'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 
 
 const TaskTable = (props) => {
@@ -35,31 +37,35 @@ const TaskTable = (props) => {
     }
 
     const renderRemoveButton =(task)=>{
-        return <button  onClick={ ()=>props.onRemoveTask(task._id) }>
-                    x
-                </button>
+        return <div onClick={ ()=>props.onRemoveTask(task._id) } >
+            <FontAwesomeIcon icon={faWindowClose} className="closeButton"/>
+        </div>
     }
         return  (
-            <div>
+            <div className='TaskTable'>
                 <h2> My tasks </h2>
+                <div className='Tasks'>
                     { props.tasks ? 
                      props.tasks.map((task, index) => {
                         if(task.status !== statuses.DELETED){
                             return (
-                                <div key={ 'taskid-' + index} className="sideBySide">
+                                <div key={ 'taskid-' + index} className="Task sideBySide">
                                     { renderCheckbox(task)}
                               
                                     { task.isEditing ?
                                         renderEditView(task)
                                         : renderDefaultView(task)                                    
                                     }
-
-                                  {renderRemoveButton(task)}
+                                 { task.status !== statuses.ACTIVE ?
+                                  renderRemoveButton(task) :
+                                  null
+                                }
                                 </div>
                             )
                         }
                     }) 
                     : null}
+                </div>
             </div>)
     
 };

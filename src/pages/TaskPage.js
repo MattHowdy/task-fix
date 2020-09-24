@@ -97,36 +97,27 @@ class TaskPage extends Component {
     editTask = async(e, taskID)=>{
         const validatedInput = inputValidation(e.target.value)
 
-        if(e.key === constants.ENTER){
-            const tasks = [...this.state.tasks].map(stateTask =>{
-                if(stateTask._id === taskID && stateTask.status === statuses.ACTIVE){
-                    if(validatedInput){
-                        stateTask.isEditing = false
-                        stateTask.value = validatedInput
-                    }else{
-                        stateTask.status = statuses.DELETED
-                    }
-                }
-                return stateTask
-            })
-        
+        if(e.key === constants.ENTER){   
+            const tasks = this.updateOrDelete(validatedInput, taskID)
             this.setState({tasks })
-
             validatedInput ? await patch(`tasks/update/${taskID}`, { value: validatedInput}) : await deleteReq(`/tasks/delete/${taskID}`)  
         }
-    }
-
-    taskEditChange =(e)=>{
-        this.setState({ currentTask : e.target.value})
     }
 
     closeEditView = async(taskID)=>{
         const validatedInput = inputValidation(this.state.currentTask)
 
-        const tasks = [...this.state.tasks].map( (stateTask) =>{
-            if(stateTask._id === taskID && stateTask.status === statuses.ACTIVE ){
-                stateTask.isEditing = false
+        const tasks = this.updateOrDelete(validatedInput, taskID)
+        this.setState({ tasks, currentTask : ''})
+
+        validatedInput ? await patch(`tasks/update/${taskID}`, { value: validatedInput}) : await deleteReq(`/tasks/delete/${taskID}`)  
+    }
+
+    updateOrDelete = (validatedInput, taskID)=>{
+        return [...this.state.tasks].map(stateTask =>{
+            if(stateTask._id === taskID && stateTask.status === statuses.ACTIVE){
                 if(validatedInput){
+                    stateTask.isEditing = false
                     stateTask.value = validatedInput
                 }else{
                     stateTask.status = statuses.DELETED
@@ -134,26 +125,26 @@ class TaskPage extends Component {
             }
             return stateTask
         })
-        this.setState({ tasks, currentTask : ''})
-
-        validatedInput ? await patch(`tasks/update/${taskID}`, { value: validatedInput}) : await deleteReq(`/tasks/delete/${taskID}`)  
     }
 
+    taskEditChange =(e)=>{
+        this.setState({ currentTask : e.target.value})
+    }
 
     render() {
         return (
-            <div >
-                <TaskInput onAddTask={this.addTask} />
+            <div className='TaskPageContainer'>
+                    <TaskInput onAddTask={this.addTask} />
 
-                <TaskTable 
-                    tasks={this.state.tasks}
-                    onCompleteTask={this.completeTask}
-                    onEditTask={this.editTask}
-                    onStartEditingTask={this.startEditingTask}
-                    onRemoveTask={this.removeTask}
-                    onCloseEditView={this.closeEditView}
-                    onTaskEditChange={this.taskEditChange}
-                />
+                    <TaskTable 
+                        tasks={this.state.tasks}
+                        onCompleteTask={this.completeTask}
+                        onEditTask={this.editTask}
+                        onStartEditingTask={this.startEditingTask}
+                        onRemoveTask={this.removeTask}
+                        onCloseEditView={this.closeEditView}
+                        onTaskEditChange={this.taskEditChange}
+                    />
             </div>
         );
     }

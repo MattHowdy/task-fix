@@ -6,9 +6,10 @@ body {
   font-size: 16px;
 }
 .appContainer{
-  height: 100vh;
+  min-height: 100vh;
   width: 100vw;
   background-color: rgb(240, 239, 237);
+  padding-bottom: 100px;
 }
 
 /* NAVBAR  START */
@@ -28,29 +29,16 @@ body {
 
 
 /* TASKPAGE START */
-.completedTask {
-  text-decoration : line-through;
-  color: lightgrey
-}
-
-.sideBySide{
-  display: flex;
-}
-
 .TaskPageContainer{
   background-color: white;
   width: 100vw;
-  height : 66vh;
+  min-height : 66vh;
   margin: auto;
   max-width: 50%;
   min-width: 320px;
   padding: 10px;
   border: 1px solid grey;
   text-align: center;
-}
-
-@media (max-width: 500px) {
-
 }
 
 .TaskTable h2{
@@ -62,19 +50,40 @@ body {
 
 
 .TaskTable .Tasks{
-  margin: 0 auto;
-  width: 50%;
+  text-align: left;
 }
 
 .TaskTable .Tasks .Task{
-  margin: 7px
+  margin: 10px;
+  min-width: 200px;
+  padding : 0px 10px;
 }
 
-.TaskTable .Tasks .Button{
-  background-color: red
+
+.TaskTable .Tasks .RemoveBtn{
+  color: red;
+  padding : 0px 15px;
 }
 
-.closeButton{
-  color: red
+.TaskTable .Tasks .CompleteBtn{
+  color: green;
+  margin: 0 10px;
+  padding : 2px;
+  border-radius: 50%;
 }
+
+.TaskTable .Tasks .Task .completedTask {
+  text-decoration : line-through;
+  color: lightgrey
+}
+
+.TaskTable .Tasks .Task  .Text{
+  padding: 0px 10px;
+}
+
+.sideBySide{
+  display: flex;
+}
+
+
 /* TASKPAGE END */

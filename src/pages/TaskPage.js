@@ -10,8 +10,7 @@ import { get, post, deleteReq, patch } from '../helpers/requests'
 class TaskPage extends Component {
     state={
         tasks:[],
-        currentTask : '',
-        newTask : ''
+        currentTask : ''
     }
     
     componentDidMount = async()=>{
@@ -30,6 +29,7 @@ class TaskPage extends Component {
 
         if(e.key === constants.ENTER && validatedValue){
              let tasks = [...this.state.tasks, {	
+                _id : "temp-id-" + this.state.tasks.length + 1,
                 status: statuses.ACTIVE,
                 value : validatedValue,	
                 isEditing: false

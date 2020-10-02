@@ -9,54 +9,21 @@ function getAxtiosInstance() {
 }
   
 
-export const get = function get(uri, params) {
-
-    return new Promise((resolve, reject) => {
-      getAxtiosInstance().get(uri, {params})
-        .then(result => resolve(result.data))
-        .catch(error => {
-          console.error(error)
-          reject(error)
-        })
-    })
+export const get =  function get(uri, params) {
+    return getAxtiosInstance().get(uri, {params})
   }
 
 
 export const post = function post(uri, body){
-
-  return new Promise((resolve, reject) => {
-      getAxtiosInstance().post(uri, body)
-        .then(result => resolve(result.data))
-        .catch(error => {
-          console.error(error)
-          reject(error)
-      })
-  })
+    return getAxtiosInstance().post(uri, body)
 }
 
 
 export const deleteReq = function deleteReq(uri) {
-
-  return new Promise((resolve, reject) => {
-    getAxtiosInstance().delete(uri)
-      .then(result => resolve(result.data))
-      .catch(error => {
-        console.error(error)
-        reject(error)
-      })
-  })
+  return getAxtiosInstance().delete(uri)
 }
 
 
 export const patch = function patch(uri, body) {
-
-  return new Promise((resolve, reject) => {
-    getAxtiosInstance().patch(uri, body)
-      .then(result => resolve(result.data))
-      .catch(error => {
-        console.error(error)
-        reject(error)
-    })
-
-  })
+  return getAxtiosInstance().patch(uri, body)
 }

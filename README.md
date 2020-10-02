@@ -1,8 +1,8 @@
 
 # TASKFIX WEB
-In this minimalistic todo app you can easily manage your daily todos. 
-It allows you to add a new task, if you wish you can update them by double clicking on its name. 
-In case you accomplished your tasks you can remove it from the list by hitting the "X" button next to it name.
+In this minimalistic todo app, you can easily manage your daily todos. 
+It allows you to add a new task if you wish you can update them by double-clicking on its name. 
+In case you accomplished your tasks you can remove it from the list by hitting the "X" button next to its name.
 
 
 # INSPECT
@@ -16,8 +16,8 @@ Requirements:
 
 - You need to set the ENV-s in the .env file, check out the .env-example 
 - After installing the app (npm install) you can start it by running the "npm run start" command. The application will be opened on the localhost:3000. 
-In this case the application is connected the deployed API (https://api-task-fix.herokuapp.com/)
-To connect it the local API you should run "npm run dev" + start the API locally as well.
+In this case, the application is connected to the deployed API (https://api-task-fix.herokuapp.com/)
+To connect it to the local API you should run "npm run dev" + start the API locally as well.
 
 
 The API may be found here: https://github.com/MattHowdy/api-task-fix
@@ -27,7 +27,7 @@ The API may be found here: https://github.com/MattHowdy/api-task-fix
 # FURTHER DEVELOPMENT IDEAS
 - Error handling + Notifications
 - UI: count tasks, display completed tasks/ deleted task in a new Tab
-- Responive design
-- utlize webpack
+- Responsive design
+- utilize webpack
 - Task status view
 - User management + authentication

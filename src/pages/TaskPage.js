@@ -6,6 +6,7 @@ import TaskTable from '../components/TaskTable';
 import TaskInput from '../components/TaskInput';
 import { inputValidation } from '../helpers/validation'
 import { get, post, deleteReq, patch } from '../helpers/requests'
+import { ObjectID } from 'bson';
 
 class TaskPage extends Component {
     state={
@@ -14,22 +15,18 @@ class TaskPage extends Component {
     }
     
     componentDidMount = async()=>{
-        await get('/tasks')
-            .then(this.refreshTasks)
+        const tasks = await get('/tasks/')
+        this.setState({ tasks : tasks.data })
     }
 
-    refreshTasks = tasks => this.setState({ tasks })
 
-    refreshTaskList = () => this.setState({tasks: !this.state.tasks})
-
-
-    addTask = async (e)=>{
+    addTask = (e)=>{
         e.persist()
         const validatedValue = inputValidation(e.target.value)
 
         if(e.key === constants.ENTER && validatedValue){
              let tasks = [...this.state.tasks, {	
-                _id : "temp-id-" + this.state.tasks.length + 1,
+                _id : new ObjectID(),
                 status: statuses.ACTIVE,
                 value : validatedValue,	
                 isEditing: false
@@ -37,7 +34,7 @@ class TaskPage extends Component {
             this.setState({tasks})
             e.target.value = null
 
-            await post('/tasks/create', {task : validatedValue})
+            post('/tasks', {task : validatedValue})
         }
     }
 
@@ -55,7 +52,7 @@ class TaskPage extends Component {
         })
         this.setState({ tasks })
 
-        sendRequest ? await deleteReq(`/tasks/delete/${taskID}`) : null
+        sendRequest ? await deleteReq(`/tasks/${taskID}`) : null
     }
 
 
@@ -75,7 +72,7 @@ class TaskPage extends Component {
         }) 
         this.setState({ tasks })
 
-        sendRequest ? await patch(`tasks/update/${taskID}`, { status : sendRequest}) : null
+        sendRequest ? await patch(`tasks/${taskID}`, { status : sendRequest}) : null
     }
 
 
@@ -100,7 +97,7 @@ class TaskPage extends Component {
         if(e.key === constants.ENTER){   
             const tasks = this.updateOrDelete(validatedInput, taskID)
             this.setState({tasks })
-            validatedInput ? await patch(`tasks/update/${taskID}`, { value: validatedInput}) : await deleteReq(`/tasks/delete/${taskID}`)  
+            validatedInput ? await patch(`tasks/${taskID}`, { value: validatedInput}) : await deleteReq(`/tasks/${taskID}`)  
         }
     }
 
@@ -110,7 +107,7 @@ class TaskPage extends Component {
         const tasks = this.updateOrDelete(validatedInput, taskID)
         this.setState({ tasks, currentTask : ''})
 
-        validatedInput ? await patch(`tasks/update/${taskID}`, { value: validatedInput}) : await deleteReq(`/tasks/delete/${taskID}`)  
+        validatedInput ? await patch(`tasks/${taskID}`, { value: validatedInput}) : await deleteReq(`/tasks/${taskID}`)  
     }
 
     updateOrDelete = (validatedInput, taskID)=>{

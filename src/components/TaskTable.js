@@ -8,7 +8,7 @@ import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 export function TaskTable(props){
 
     const renderEditView = (task)=>{
-        return <div className='sideBySide'>
+        return <div className='flex'>
                 <input
                     autoFocus
                     defaultValue={task.value}
@@ -23,7 +23,7 @@ export function TaskTable(props){
 
     const renderDefaultView =(task)=>{
         return <div 
-                className={ task.status === statuses.COMPLETED ? 'completedTask Text' : 'Text'}
+                className={ task.status === statuses.COMPLETED ? 'CompletedTask Text' : 'Text'}
                 onDoubleClick={()=>props.onStartEditingTask(task._id)}
                 >
                 {task.value}

@@ -5,7 +5,8 @@ import {
   Redirect,
   Switch
 } from 'react-router-dom'
-import './App.css'
+// import './App.css'
+import './styles/stylesheets.scss'
 import MainFrame from './components/Layout/MainFrame'
 import { TaskPage } from './pages/TaskPage'
 

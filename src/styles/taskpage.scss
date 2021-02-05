@@ -1,0 +1,57 @@
+.TaskPageContainer {
+    background-color: $taskcontainer-background;
+    width: 100vw;
+    min-height: 66vh;
+    margin: auto;
+    max-width: 50%;
+    min-width: 320px;
+    padding: 10px;
+    border: 1px solid grey;
+    text-align: center;
+}
+
+.TaskTable {
+
+    h2 {
+        border-top: 1px solid lightgrey;
+        padding-top: 20px;
+        margin-top: 40px;
+        font-weight: 400;
+    }
+
+    .Tasks {
+        text-align: left;
+
+        .Task {
+            margin: 10px;
+            min-width: 200px;
+            padding: 0px 10px;
+
+            .CompletedTask {
+                text-decoration: line-through;
+                color: $completed-task;
+            }
+
+            .Text {
+                padding: 0px 10px;
+            }
+        }
+
+        .RemoveBtn {
+            color:$remove-btn;
+            padding: 0px 15px;
+        }
+
+        .CompleteBtn {
+            color: $complete-btn;
+            margin: 0 10px;
+            padding: 2px;
+            border-radius: 50%;
+        }
+    }
+
+}
+
+.flex {
+    display: flex;
+}

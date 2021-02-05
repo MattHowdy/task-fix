@@ -2,7 +2,7 @@
 import React from 'react';
 
 
-const TaskInput = (props) => {
+export function TaskInput(props) {
 
     return ( 
         <div className='TaskInput'>
@@ -14,6 +14,3 @@ const TaskInput = (props) => {
         </div>
     )
 }
-
-
-export default TaskInput

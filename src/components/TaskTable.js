@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons'
 
 
-const TaskTable = (props) => {
+export function TaskTable(props){
 
     const renderEditView = (task)=>{
         return <div className='sideBySide'>
@@ -72,5 +72,3 @@ const TaskTable = (props) => {
             </div>)
     
 };
-
-export default TaskTable;

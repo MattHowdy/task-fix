@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom'
 import './App.css'
 import MainFrame from './components/Layout/MainFrame'
-import TaskPage from './pages/TaskPage'
+import { TaskPage } from './pages/TaskPage'
 
 class Routes extends React.Component {
   render() {

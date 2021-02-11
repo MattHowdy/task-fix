@@ -25,7 +25,10 @@ The API may be found here: https://github.com/MattHowdy/api-task-fix
 
 
 # FURTHER DEVELOPMENT IDEAS
+- Utilize TypeScript
 - Error handling + Notifications
+- implement design
+- Use Cypress.io
 - UI: count tasks, display completed tasks/ deleted task in a new Tab
 - Responsive design
 - utilize webpack

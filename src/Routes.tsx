@@ -5,9 +5,8 @@ import {
   Redirect,
   Switch
 } from 'react-router-dom'
-// import './App.css'
 import './styles/stylesheets.scss'
-import MainFrame from './components/Layout/MainFrame'
+import { MainFrame } from './components/Layout/MainFrame'
 import { TaskPage } from './pages/TaskPage'
 
 class Routes extends React.Component {
@@ -16,8 +15,8 @@ class Routes extends React.Component {
       <Router>
         <MainFrame>
           <Switch>
-              <Route exact path='/' component={TaskPage} />
-              <Redirect to='/' />
+            <Route exact path='/' component={TaskPage} />
+            <Redirect to='/' />
           </Switch>
         </MainFrame>
       </Router>

@@ -2,7 +2,11 @@
 import React from 'react';
 
 
-export function TaskInput(props) {
+interface Props{
+    // onAddTask(e: React.ChangeEvent<HTMLInputElement>) : void
+    onAddTask(e: React.KeyboardEvent<HTMLInputElement>): void;
+}
+export function TaskInput(props: Props) {
 
     return ( 
         <div className='TaskInput'>

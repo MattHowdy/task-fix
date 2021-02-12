@@ -1,49 +1,66 @@
 /* eslint-disable no-unused-expressions */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import statuses from '../model/Statuses'
 import constants from '../helpers/constants'
-import { TaskTable } from '../components/TaskTable';
-import { TaskInput } from '../components/TaskInput';
+import { TaskTable } from '../components/TaskTable'
+import { TaskInput } from '../components/TaskInput'
 import { inputValidation } from '../helpers/validation'
 import { get, post, deleteReq, patch } from '../helpers/requests'
-import { ObjectID } from 'bson';
 
+interface Task{
+    _id : string,
+    status : number,
+    isEditing : boolean,
+    value : string
+}
+
+const getTasks = ()=>{
+    return get('/tasks/')
+}
 
 export function TaskPage() {
-    const [tasks, setTasks] = useState([])
-    const [currentTask, setCurrentTask] = useState('')
+    const [tasks, setTasks] = useState<Task[]>([])
+    const [currentTask, setCurrentTask] = useState<string>('')
 
-    useEffect(() => {
-        async () => {
-            const allTasks = await get('/tasks/')
-            setTasks(allTasks)
-        }
+
+    useEffect( () => {
+        getTasks().then( response =>{
+            console.log('useEffect', response)
+            
+            // TODO:
+            // setTasks(allTasks)
+        })
     }, [])
 
 
-    const addTask = (e)=>{
+    const addTask = async (e: React.KeyboardEvent<HTMLInputElement>)=>{
         e.persist()
-        const validatedValue = inputValidation(e.target.value)
+        
+        const value = (e.target as unknown as HTMLInputElement).value
+        const validatedValue = inputValidation(value)
 
         if(e.key === constants.ENTER && validatedValue){
-             let newTasks = [{	
-                _id : new ObjectID(),
-                status: statuses.ACTIVE,
-                value : validatedValue,	
-                isEditing: false
-            }, ...tasks]	
+             let newTasks = [{
+                value : validatedValue
+            }]	
             
-            setTasks(newTasks)
-            e.target.value = null
+            console.log('newTasks', newTasks);
+            
+            const postedValue = await post('/tasks', newTasks)
 
-            post('/tasks', {task : validatedValue})
+            console.log('postedValue', postedValue.data);
+            
+            // [ postedValue ,...tasks]
+            // setTasks(newTasks)
+
+            // e.target.value = null
         }
     }
 
-    const completeTask = async(taskID)=>{
-        let sendRequest = ''
+    const completeTask = async(taskID : string)=>{
+        let sendRequest
 
-        const newTasks = [...tasks].map( task => {
+        const newTasks = [...tasks].map( (task: Task) => {
             if(task._id === taskID){
                 if(task.status === statuses.COMPLETED){
                     task.status = statuses.ACTIVE
@@ -55,12 +72,16 @@ export function TaskPage() {
             return task
         }) 
         setTasks(newTasks)
-        sendRequest ? await patch(`tasks/${taskID}`, { status : sendRequest}) : null
+        if(sendRequest){
+            await patch(`tasks/${taskID}`,{ status : sendRequest}) 
+        }
     }
 
 
-    const editTask = async(e, taskID)=>{
-        const validatedInput = inputValidation(e.target.value)
+    const editTask = async(e: React.KeyboardEvent<HTMLInputElement>, taskID: string)=>{
+        const value = (e.target as unknown as HTMLInputElement).value
+
+        const validatedInput = inputValidation(value)
 
         if(e.key === constants.ENTER){   
             const newTasks = updateOrDelete(validatedInput, taskID)
@@ -70,7 +91,7 @@ export function TaskPage() {
     }
 
 
-    const updateOrDelete = (validatedInput, taskID)=>{
+    const updateOrDelete = (validatedInput: string, taskID: string)=>{
         return [...tasks].map(task =>{
             if(task._id === taskID && task.status === statuses.ACTIVE){
                 if(validatedInput){
@@ -84,7 +105,7 @@ export function TaskPage() {
         })
     }
 
-    const startEditingTask =(taskID)=>{
+    const startEditingTask =(taskID : string)=>{
         const isAnyTaskInEditing = [...tasks].filter(task => task.isEditing === true).length === 0
 
         if(isAnyTaskInEditing){
@@ -98,7 +119,7 @@ export function TaskPage() {
         }
     }
 
-    const removeTask = async(taskID)=>{
+    const removeTask = async(taskID : string)=>{
         let sendRequest = false 
 
         const newTasks = [...tasks].map( task => {
@@ -111,19 +132,21 @@ export function TaskPage() {
         })
         setTasks(newTasks)
 
-        sendRequest ? await deleteReq(`/tasks/${taskID}`) : null
+        if(sendRequest){
+            await deleteReq(`/tasks/${taskID}`)
+        }
     }
 
-    const closeEditView = async(taskID)=>{
+    const closeEditView = async(taskID : string)=>{
         const validatedInput = inputValidation(currentTask)
-        const newTasks = this.updateOrDelete(validatedInput, taskID)
+        const newTasks = updateOrDelete(validatedInput, taskID)
         setTasks(newTasks)
         setCurrentTask('')
 
         validatedInput ? await patch(`tasks/${taskID}`, { value: validatedInput}) : await deleteReq(`/tasks/${taskID}`)  
     }
 
-    const taskEditChange =(e)=>{
+    const taskEditChange =(e: { target: { value: React.SetStateAction<string> } })=>{
         setCurrentTask(e.target.value)
     }
 
